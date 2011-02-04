@@ -1,0 +1,25 @@
+// SCHNIPP
+EnumVariant enumVariant =null;
+Dispatch item = null;
+String query = "SELECT * FROM Win32_Processor";
+if (getHost()!=null && "localhost".equalsIgnoreCase(getHost())) {
+	String connectStr = String.format("winmgmts:\\\\%s\\root\\CIMV2", getHost());
+	ActiveXComponent axWMI = new ActiveXComponent(connectStr);
+	//Execute the query
+	Variant vCollection = axWMI.invoke("ExecQuery", new Variant(query));
+	enumVariant = new EnumVariant(vCollection.toDispatch());
+	item = null;
+} else {
+	// wenn entfernte Rechner abgefragt werden müssen, so muss dort der WMI-dienst gestartet werden (net start winmgmt)
+	// und es müssen domain\benutzer sowie Kennwort angegeben werden.
+        // namespace = "root\\cimv2" <-- default
+	ActiveXComponent locator = new ActiveXComponent("WbemScripting.SWbemLocator");
+	Dispatch services = locator.invoke("ConnectServer", new Variant(getHost()),new Variant(getNamespace()), new Variant(getUser()), new Variant(getPassword())).toDispatch();
+	Dispatch objectSet = Dispatch.call(services, "ExecQuery", query).toDispatch();
+	enumVariant = new EnumVariant(objectSet);
+}
+while (enumVariant.hasMoreElements()) {
+	item = enumVariant.nextElement().toDispatch();
+        String value = "LoadPercentage";
+	String resultValue = Dispatch.call(item, value).toString();
+}
