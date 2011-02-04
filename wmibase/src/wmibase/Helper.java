@@ -65,7 +65,6 @@ public class Helper {
 		} finally {
 			enumerableAuto.dispose();
 		}
-
 	}
 
 	public static Object convertVariant(Variant variant) {

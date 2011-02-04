@@ -50,21 +50,22 @@ public class WMIConnection {
 
 					final Map<String, Object> params = new HashMap<String, Object>();
 
-					Helper.forEachVariant(
-							Helper.getParameter(variant, "Properties_"),
-							new VariantVisitor() {
+					Variant properties = Helper.getParameter(variant,
+							"Properties_");
 
-								@Override
-								public void visit(Variant variant) {
-									params.put(
-											Helper.getParameter(variant, "Name")
-													.getString(), Helper
-													.convertVariant(Helper
-															.getParameter(
-																	variant,
-																	"Value")));
-								}
-							});
+					Helper.forEachVariant(properties, new VariantVisitor() {
+
+						@Override
+						public void visit(Variant variant) {
+
+							Variant name = Helper.getParameter(variant, "Name");
+							Variant value = Helper.getParameter(variant,
+									"Value");
+							Object objectValue = Helper.convertVariant(value);
+
+							params.put(name.getString(), objectValue);
+						}
+					});
 
 					result.add(new WMIObjectInformation(Helper.getParameter(
 							Helper.getParameter(variant, "Path_"), "Path")
@@ -76,7 +77,6 @@ public class WMIConnection {
 		} finally {
 			serviceAutomation.dispose();
 		}
-
 	}
 
 	public void dispose() {
