@@ -46,13 +46,11 @@ public class View extends ViewPart {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if ( parentElement instanceof Object[])
-			{
-				return (Object[])parentElement;
-			}
-			else if ( parentElement instanceof WMIObjectInformation )
-			{
-				return ((WMIObjectInformation)parentElement).getProperties().entrySet().toArray();
+			if (parentElement instanceof Object[]) {
+				return (Object[]) parentElement;
+			} else if (parentElement instanceof WMIObjectInformation) {
+				return ((WMIObjectInformation) parentElement).getProperties()
+						.entrySet().toArray();
 			}
 			return null;
 		}
@@ -66,86 +64,86 @@ public class View extends ViewPart {
 		public boolean hasChildren(Object element) {
 			return getChildren(element) != null;
 		}
-		
+
 	}
 
 	class ViewLabelProvider extends LabelProvider implements
 			ITableLabelProvider {
+		@Override
 		public String getColumnText(Object obj, int index) {
 			return getText(obj);
 		}
-		
+
 		@Override
 		public String getText(Object element) {
-			if ( element instanceof WMIObjectInformation )
-			{
-				return ((WMIObjectInformation)element).getPath();
+			if (element instanceof WMIObjectInformation) {
+				return ((WMIObjectInformation) element).getPath();
 			}
 			return super.getText(element);
 		}
 
+		@Override
 		public Image getColumnImage(Object obj, int index) {
 			return getImage(obj);
 		}
 
+		@Override
 		public Image getImage(Object obj) {
 			return null;
 		}
 	}
 
+	@Override
 	public void createPartControl(Composite parent) {
-		
-		parent.setLayout(new GridLayout(2,false));
-		this.entryField = new Text (parent, SWT.BORDER );
+
+		parent.setLayout(new GridLayout(2, false));
+		this.entryField = new Text(parent, SWT.BORDER);
 		entryField.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
-		Button queryButton = new Button ( parent, SWT.PUSH );
+
+		Button queryButton = new Button(parent, SWT.PUSH);
 		queryButton.setText("Query");
-		queryButton.addSelectionListener(new SelectionAdapter (){
+		queryButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				triggerQuery ();
+				triggerQuery();
 			}
 		});
-		
-		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
+
+		viewer = new TreeViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		viewer.setContentProvider(new ViewContentProvider());
 		viewer.setLabelProvider(new ViewLabelProvider());
 		// Provide the input to the ContentProvider
-		viewer.setInput ( list ( "SELECT * FROM Win32_Processor" ) );
-		
-		GridData gd = new GridData ( SWT.FILL, SWT.FILL, true, true);
-		gd.horizontalSpan=2;
-		viewer.getControl().setLayoutData(gd );
+		viewer.setInput(list("SELECT * FROM Win32_Processor"));
+
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.horizontalSpan = 2;
+		viewer.getControl().setLayoutData(gd);
 	}
 
 	protected void triggerQuery() {
-		try
-		{
+		try {
 			viewer.setInput(list(entryField.getText()));
-		}
-		catch ( Throwable e )
-		{
-			ErrorDialog.openError(this.getSite().getShell(), "Error", "Failed to query WMI", new Status(IStatus.ERROR,Activator.PLUGIN_ID,"Failed to execute WMI query", e));
+		} catch (Throwable e) {
+			ErrorDialog.openError(this.getSite().getShell(), "Error",
+					"Failed to query WMI", new Status(IStatus.ERROR,
+							Activator.PLUGIN_ID, "Failed to execute WMI query",
+							e));
 		}
 	}
 
-	private Object[] list ( String query )
-	{
+	private Object[] list(String query) {
 		WMIConnection connection = new WMIConnection();
-		try
-		{
+		try {
 			return connection.executeQuery(query).toArray();
-		}
-		finally
-		{
+		} finally {
 			connection.dispose();
 		}
 	}
+
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
+	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
