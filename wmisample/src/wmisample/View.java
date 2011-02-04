@@ -19,6 +19,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import wmibase.WMIConnection;
+import wmibase.WMIObjectInformation;
+
 public class View extends ViewPart {
 	public static final String ID = "wmisample.view";
 

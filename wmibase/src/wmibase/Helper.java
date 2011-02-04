@@ -1,8 +1,9 @@
-package wmisample;
+package wmibase;
 
 import org.eclipse.swt.internal.ole.win32.COM;
 import org.eclipse.swt.internal.ole.win32.IEnumVARIANT;
 import org.eclipse.swt.internal.win32.OS;
+import org.eclipse.swt.ole.win32.OLE;
 import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
 
@@ -48,7 +49,7 @@ public class Helper {
 				
 				try
 				{
-					while (enumVariant.Next(1, rgelt, pceltFetched) == COM.S_OK && pceltFetched[0] == 1) {
+					while (enumVariant.Next(1, rgelt, pceltFetched) == OLE.S_OK && pceltFetched[0] == 1) {
 						Variant v = Variant.win32_new(rgelt);
 						variantVisitor.visit ( v );
 					}
@@ -63,7 +64,7 @@ public class Helper {
 				enumVariant.Release();
 			}
 			
-			return OS.S_OK;
+			return OLE.S_OK;
 			
 		}
 		finally
@@ -82,34 +83,34 @@ public class Helper {
 		short type = variant.getType();
 		switch ( type )
 		{
-		case COM.VT_EMPTY:
-		case COM.VT_NULL:
+		case OLE.VT_EMPTY:
+		case OLE.VT_NULL:
 			return null;
-		case COM.VT_BOOL:
+		case OLE.VT_BOOL:
 			return variant.getBoolean();
 			
-		case COM.VT_I1:
+		case OLE.VT_I1:
 			return variant.getByte ();
-		case COM.VT_I2:
+		case OLE.VT_I2:
 			return variant.getShort ();
-		case COM.VT_I4:
+		case OLE.VT_I4:
 			return variant.getInt();
-		case COM.VT_I8:
+		case OLE.VT_I8:
 			return variant.getLong();
 			
-		case COM.VT_UI1:
+		case OLE.VT_UI1:
 			return variant.getChar();
-		case COM.VT_UI2:
+		case OLE.VT_UI2:
 			return variant.getShort ();
-		case COM.VT_UI4:
+		case OLE.VT_UI4:
 			return variant.getInt();
 			
-		case COM.VT_BSTR:
+		case OLE.VT_BSTR:
 			return variant.getString ();
 			
-		case COM.VT_R4:
+		case OLE.VT_R4:
 			return variant.getFloat();
-		case COM.VT_R8:
+		case OLE.VT_R8:
 			return variant.getDouble();
 			
 		// FIXME: add some more

@@ -1,4 +1,4 @@
-package wmisample;
+package wmibase;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import org.eclipse.swt.ole.win32.OLE;
 import org.eclipse.swt.ole.win32.OleAutomation;
 import org.eclipse.swt.ole.win32.Variant;
 
-import wmisample.Helper.VariantVisitor;
+import wmibase.Helper.VariantVisitor;
 
 public class WMIConnection {
 	
