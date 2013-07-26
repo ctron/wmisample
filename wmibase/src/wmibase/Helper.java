@@ -30,13 +30,14 @@ public class Helper {
 			Variant enumObject = enumerableAuto.getProperty(Helper.getId(
 					enumerableAuto, "_NewEnum"));
 
-			long /* int */[] ppvObject = new long /* int */[1];
+			int[] ppvObject = new int [1];
 			int rc = enumObject.getUnknown().QueryInterface(
 					COM.IIDIEnumVARIANT, ppvObject);
 
 			if (rc != OS.S_OK)
 				return rc;
 
+			
 			IEnumVARIANT enumVariant = new IEnumVARIANT(ppvObject[0]);
 
 			try {
@@ -44,7 +45,7 @@ public class Helper {
 
 				int[] pceltFetched = new int[1];
 
-				long rgelt = OS.GlobalAlloc(OS.GMEM_FIXED | OS.GMEM_ZEROINIT,
+				int rgelt = OS.GlobalAlloc(OS.GMEM_FIXED | OS.GMEM_ZEROINIT,
 						Variant.sizeof);
 
 				try {
